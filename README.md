@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang=“en”>
-<head>
-<title>Resume</title>
-</head>
-<body>
+  <head>
+    <title>Resume</title>
+  </head>
+  <body>
 
 
 
 
   
-</body>
+  </body>
 </html>
