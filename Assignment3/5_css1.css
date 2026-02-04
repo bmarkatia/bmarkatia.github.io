@@ -1,115 +1,100 @@
-/* 5_css1.css */
-
-body{
-	background: #b8ddea;          /* light blue page background */
-	margin: 0;
-	padding: 18px 22px;
-	color: #000;
+/* Body styling with background color */
+body {
+    background-color: #a8d5e2;
+    margin: 20px;
 }
 
-/* Big centered title */
-h1{
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 64px;
-	font-weight: 800;
-	text-align: center;
-	margin: 10px 0 18px;
+/* Main heading centered */
+h1 {
+    text-align: center;
+    font-size: 48px;
+    margin-bottom: 30px;
 }
 
-/* Section headers */
-h2{
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 28px;
-	font-weight: 800;
-	margin: 10px 0 8px;
+/* Section headings */
+h2 {
+    font-size: 28px;
+    margin-top: 30px;
+    margin-bottom: 15px;
 }
 
-h3{
-	font-family: "Times New Roman", Times, serif;
-	font-size: 18px;
-	font-weight: 800;
-	margin: 18px 0 6px;
+h3 {
+    font-size: 20px;
+    margin-top: 20px;
+    margin-bottom: 10px;
 }
 
 /* Paragraph styling */
-p{
-	font-family: "Times New Roman", Times, serif;
-	font-size: 12px;
-	line-height: 1.55;
-	margin: 0 0 14px;
+p {
+    line-height: 1.4;
+    margin-bottom: 15px;
 }
 
-#paragraph2{
-    background:#f2f2f2;
-    border:4px solid #0b7a14;
-    box-sizing:border-box;
-    width:50%;          /* half the page width */
-    margin:18px 0;      /* keeps it LEFT aligned */
-    padding:18px 22px;
-    text-align:left;
+/* Second paragraph with green border */
+#paragraph2 {
+    border: 4px solid #2d7a2d;
+    padding: 15px;
+    margin: 20px 0;
+    width: 700px;
+    line-height: 1.5;
 }
 
-
-
-/* Blue highlight paragraphs (4th and 5th) */
-.blue{
-	background: #0a1a7a;         /* deep blue */
-	color: #ffffff;
-	border: 2px solid #07124d;
-	padding: 14px 16px;
-	margin: 14px 0;
-	line-height: 1.6;
+/* Blue background paragraphs (4th and 5th paragraphs) */
+p.blue {
+    background-color: #1e3a8a;
+    color: white;
+    padding: 12px;
+    margin: 10px 0;
 }
 
-/* Lists: two-digit numbering */
-ol{
-	list-style-type: decimal-leading-zero; /* 01, 02, ... */
-	padding-left: 34px;
-	margin: 6px 0 18px;
+/* Ordered list with two-digit numbering */
+ol {
+    list-style-type: decimal-leading-zero;
+    margin-bottom: 25px;
 }
 
-ol li{
-	margin: 2px 0;
+ol li {
+    margin-bottom: 5px;
 }
 
-/* Link colors */
-ol a:link,
-ol a:visited{
-	color: #1a4fb3;              /* list item links */
-	text-decoration: underline;
+/* Link styling for list items */
+ol li a {
+    color: #0066cc;
+    text-decoration: none;
 }
 
-ol a:hover{
-	color: #0b2e7a;
+ol li a:hover {
+    text-decoration: underline;
 }
 
-/* Make the w3schools link a different color than list links */
-a[href*="w3schools"]:link,
-a[href*="w3schools"]:visited{
-	color: #b22222;              /* reddish */
+/* W3schools link styling (different color) */
+section p a {
+    color: #cc0066;
+    text-decoration: underline;
 }
 
-/* Table styling: different header/cell backgrounds + overlapping borders */
-table{
-	border-collapse: collapse;   /* borders overlap */
-	margin-top: 8px;
-	width: 520px;
-	background: #ffffff;
+section p a:hover {
+    color: #990050;
 }
 
-th, td{
-	border: 2px solid #666666;
-	padding: 6px 10px;
-	font-family: "Times New Roman", Times, serif;
-	font-size: 12px;
-	vertical-align: top;
+/* Table styling */
+table {
+    border-collapse: collapse;
+    width: 500px;
+    margin-top: 15px;
 }
 
-th{
-	background: #cfcfcf;         /* header is gray */
-	font-weight: 800;
+/* Table header styling */
+th {
+    background-color: #d4d4d4;
+    border: 1px solid black;
+    padding: 8px;
+    text-align: left;
 }
 
-td{
-	background: #ffffff;         /* cells white */
+/* Table cell styling */
+td {
+    background-color: #f0f0f0;
+    border: 1px solid black;
+    padding: 8px;
 }
