@@ -42,12 +42,13 @@ p{
 #paragraph2{
     background:#f2f2f2;
     border:4px solid #0b7a14;
-    box-sizing:border-box;   /* makes width include border */
-    width:100%;              /* full width like other content */
-    margin:18px 0;
-    padding:10px;            /* smaller padding so it doesn't look indented */
+    box-sizing:border-box;
+    width:50%;          /* half the page width */
+    margin:18px 0;      /* keeps it LEFT aligned */
+    padding:18px 22px;
     text-align:left;
 }
+
 
 
 /* Blue highlight paragraphs (4th and 5th) */
