@@ -39,15 +39,14 @@ p{
 	margin: 0 0 14px;
 }
 
-/* The boxed 2nd paragraph */
 #paragraph2{
     background:#f2f2f2;
     border:4px solid #0b7a14;
     padding:18px 22px;
-    width:72%;
-    margin:18px 0;   /* left aligned */
+    margin:18px 0;
     line-height:1.9;
 }
+
 
 
 /* Blue highlight paragraphs (4th and 5th) */
