@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizza Ordering Form</title>
+</head>
+<body>
+    <h1>Pizza Ordering Form</h1>
+    
+    <form>
+        <section>
+            <h2>Contact Information</h2>
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+            <br><br>
+            
+            <label for="phone">Phone:</label>
+            <input type="tel" id="phone" name="phone" required>
+            <br><br>
+            
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            <br><br>
+        </section>
+
+        <section>
+            <h2>Select Pizza Size</h2>
+            <label for="pizza-size">Pizza Size:</label>
+            <select id="pizza-size" name="pizza-size" required>
+                <option value="">--Select Size--</option>
+                <option value="medium">Medium</option>
+                <option value="large">Large</option>
+                <option value="xlarge">XLarge</option>
+            </select>
+            <br><br>
+        </section>
+
+        <section>
+            <h2>Select Sauce</h2>
+            <input type="radio" id="marinara" name="sauce" value="marinara" required>
+            <label for="marinara">Marinara</label>
+            <br>
+            
+            <input type="radio" id="ranch" name="sauce" value="ranch" required>
+            <label for="ranch">Ranch</label>
+            <br>
+            
+            <input type="radio" id="no-sauce" name="sauce" value="no-sauce" required>
+            <label for="no-sauce">No Sauce</label>
+            <br><br>
+        </section>
+
+        <section>
+            <h2>Select Toppings</h2>
+            <input type="checkbox" id="pepperoni" name="toppings" value="pepperoni">
+            <label for="pepperoni">Pepperoni</label>
+            
+            <input type="checkbox" id="sausage" name="toppings" value="sausage">
+            <label for="sausage">Sausage</label>
+            <br>
+            
+            <input type="checkbox" id="mushroom" name="toppings" value="mushroom">
+            <label for="mushroom">Mushroom</label>
+            
+            <input type="checkbox" id="pineapple" name="toppings" value="pineapple">
+            <label for="pineapple">Pineapple</label>
+            <br>
+            
+            <input type="checkbox" id="peppers" name="toppings" value="peppers">
+            <label for="peppers">Peppers</label>
+            
+            <input type="checkbox" id="onions" name="toppings" value="onions">
+            <label for="onions">Onions</label>
+            <br><br>
+        </section>
+
+        <section>
+            <h2>Additional Instructions</h2>
+            <textarea id="instructions" name="instructions" rows="4" cols="50" placeholder="Add instructions"></textarea>
+            <br><br>
+        </section>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <section>
+        <h2>List of My Favorite Games</h2>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Developer</th>
+                    <th>Title</th>
+                    <th>Year</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td rowspan="3">Bungie</td>
+                    <td>Halo</td>
+                    <td>2001</td>
+                </tr>
+                <tr>
+                    <td>Halo 2</td>
+                    <td>2004</td>
+                </tr>
+                <tr>
+                    <td>Halo 3</td>
+                    <td>2007</td>
+                </tr>
+                <tr>
+                    <td>Mojang</td>
+                    <td colspan="2">Minecraft 2011</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3">Count: 4</td>
+                </tr>
+            </tfoot>
+        </table>
+    </section>
+</body>
+</html>
