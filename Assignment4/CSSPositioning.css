@@ -1,6 +1,4 @@
-body{
-  background: hotpink;
-}/* ===== Layout variables ===== */
+/* ===== Layout variables ===== */
 :root{
   --sidebarW: 15%;
   --headerH: 120px; /* total header height (title + buttons row) */
