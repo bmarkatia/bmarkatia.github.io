@@ -80,7 +80,7 @@ header{
 
 header p{
 	font-family:"Times New Roman", Times, serif; /* REQUIRED FIX */
-	font-size:52px;
+	font-size:36px;
 	color:#000;
 	margin:0;
 }
@@ -89,7 +89,7 @@ header p{
 h1{
 	font-family:"Times New Roman", Times, serif;
 	text-align:center;
-	font-size:50px;
+	font-size:36px;
 	margin:35px 0 25px;
 }
 
