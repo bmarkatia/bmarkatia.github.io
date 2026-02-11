@@ -151,6 +151,7 @@ article > p:first-of-type::first-letter{
 /* -----------------------------
    "Read more..." Google link arrow (Wikipedia hosted icon)
 -------------------------------- */
+
 a[href*="google.com"]::after{
 	content: "";
 	display: inline-block;
