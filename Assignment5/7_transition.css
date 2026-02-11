@@ -144,7 +144,7 @@ article:nth-of-type(7){ grid-column: 3; grid-row: 2; }
 /* ONE-LINE TEXT */
 #thanks a{
 	font-family:"Times New Roman", Times, serif;
-	font-size:28px;     /* smaller so it stays one line */
+	font-size:16px;     /* smaller so it stays one line */
 	white-space:nowrap; /* prevents wrapping */
 	color:#0033cc;
 	text-decoration:underline;
