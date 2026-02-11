@@ -158,26 +158,30 @@ a[href*="google.com"]::after{
 /* -----------------------------
    THANK YOU BOX (BOTTOM RIGHT)
 -------------------------------- */
+/* THANK YOU BOX - fixed bottom right */
+
 #thanks{
-	grid-column: 4;     /* last column */
-	grid-row: 2;        /* second row */
-	
-	width: 320px;       /* restore small box size */
-	justify-self: end;  /* push it to the right */
-	align-self: start;  /* align to top of that row */
+	position: fixed;
+	bottom: 20px;
+	right: 20px;
+
+	width: 260px;
+	padding: 12px 15px;
 
 	background: #78c7ff;
 	border: 2px solid #1f4e79;
 	text-align: center;
-	padding: 12px 15px;
+
+	transition: opacity 0.5s ease;
 }
 
 #thanks a{
 	font-family: "Times New Roman", Times, serif;
-	font-size: 36px;    /* REQUIRED 36px */
+	font-size: 28px;
 	color: #0033cc;
 	text-decoration: underline;
 }
+
 
 
 /* -----------------------------
