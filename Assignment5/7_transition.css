@@ -1,1 +1,114 @@
+/* 7_transition.css */
 
+/* -----------------------------
+   Drop cap (ONLY main text)
+   - Targets the FIRST paragraph in each article
+   - Does NOT affect the "Read more..." paragraph
+-------------------------------- */
+article > p:first-of-type::first-letter{
+	font-family: "Times New Roman", Times, serif;
+	font-size: 36px;
+	line-height: 1;
+}
+
+/* -----------------------------
+   "Read more..." Google links: add arrow icon to the right
+   - Uses a Wikimedia (Wikipedia-hosted) icon
+-------------------------------- */
+a[href*="google.com"]::after{
+	content: "";
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	margin-left: 6px;
+	vertical-align: text-bottom;
+
+	background-image: url("https://upload.wikimedia.org/wikipedia/commons/6/64/Icon_External_Link.svg");
+	background-size: contain;
+	background-repeat: no-repeat;
+}
+
+/* -----------------------------
+   Articles: start light, then dark + expand on hover (2s)
+-------------------------------- */
+article{
+	color: #b8b8b8;                 /* lightly-colored text initially */
+	transition: color 2s, transform 2s;
+	transform-origin: center top;
+}
+
+article:hover{
+	color: #111;                    /* darker text on hover */
+	transform: scale(1.08);         /* expand */
+}
+
+/* -----------------------------
+   Left navigation buttons: hover background changes
+-------------------------------- */
+#menuItems{
+	width: 240px;
+	float: left;
+	background: #000;
+	padding: 0;
+	margin: 0;
+	position: relative;
+}
+
+#menuItems button{
+	display: block;
+	width: 100%;
+	border: 1px solid #111;
+	background: #0017ff;            /* blue like your screenshots */
+	color: #fff;
+	font-size: 22px;
+	padding: 14px 10px;
+	cursor: pointer;
+}
+
+#menuItems button:hover{
+	background: #b8860b;            /* gold on hover */
+}
+
+/* -----------------------------
+   "Recent Articles" hover: show jump menu
+   HTML order is: button#recentArticles then ul#jumpMenu
+-------------------------------- */
+#jumpMenu{
+	list-style: none;
+	margin: 0;
+	padding: 10px 0;
+	background: #b8860b;            /* gold dropdown background */
+	display: none;
+
+	/* dropdown sits under the button */
+	position: absolute;
+	left: 0;
+	top: 54px;                      /* just below the first button */
+	width: 100%;
+	z-index: 5;
+}
+
+/* show when hovering the button OR the menu itself */
+#recentArticles:hover + #jumpMenu,
+#jumpMenu:hover{
+	display: block;
+}
+
+/* dropdown link styling */
+#jumpMenu li{
+	padding: 2px 0;
+}
+
+#jumpMenu a{
+	display: block;
+	padding: 2px 18px;
+	color: #0b1cff;                 /* blue links */
+	text-decoration: none;
+	font-size: 20px;
+}
+
+/* hover over a link in the dropdown: change font + bg */
+#jumpMenu a:hover{
+	background: #0017ff;            /* blue highlight */
+	color: #fff;                    /* white text */
+}
