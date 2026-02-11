@@ -1,0 +1,215 @@
+/* 7_transition.css */
+
+/* -----------------------------
+   PAGE LAYOUT
+-------------------------------- */
+body{
+	margin: 0;
+	display: flex;                 /* left menu + main content */
+	font-family: Arial, Helvetica, sans-serif;
+	background: #fff;
+}
+
+main{
+	flex: 1;
+	padding-bottom: 40px;
+}
+
+/* -----------------------------
+   HEADER
+-------------------------------- */
+header{
+	background: red;
+	height: 110px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+header p{
+	margin: 0;
+	font-family: "Times New Roman", Times, serif;  /* required */
+	font-size: 36px;                               /* required */
+	font-weight: normal;
+	color: #000;
+}
+
+/* Big title */
+h1{
+	font-family: "Times New Roman", Times, serif;
+	text-align: center;
+	font-size: 50px;
+	margin: 35px 0 25px;
+}
+
+/* -----------------------------
+   LEFT NAVIGATION
+-------------------------------- */
+#menuItems{
+	width: 240px;
+	background: #000;
+	min-height: 100vh;
+	padding: 0;
+	margin: 0;
+}
+
+#menuItems button{
+	display: block;
+	width: 100%;
+	border: 1px solid #111;
+	background: #0017ff;
+	color: #fff;
+	font-size: 22px;
+	padding: 14px 10px;
+	cursor: pointer;
+}
+
+#menuItems button:hover{
+	background: #b8860b; /* gold */
+}
+
+/* -----------------------------
+   JUMP MENU (Recent Articles dropdown)
+-------------------------------- */
+#jumpMenu{
+	list-style: none;
+	margin: 0;
+	padding: 12px 0;
+	background: #b8860b;
+	display: none;
+}
+
+#recentArticles:hover + #jumpMenu,
+#jumpMenu:hover{
+	display: block;
+}
+
+#jumpMenu a{
+	display: block;
+	padding: 2px 18px;
+	color: #0b1cff;
+	text-decoration: none;
+	font-size: 20px;
+}
+
+#jumpMenu a:hover{
+	background: #0017ff;
+	color: #fff;
+}
+
+/* -----------------------------
+   ARTICLE GRID
+   Row 1: 1-4
+   Row 2: 5-7 + THANKS under 4
+   Row 3: 8 under 5, 9 under 6, 10 under 7
+-------------------------------- */
+#container{
+	width: 90%;
+	margin: 0 auto;
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	grid-auto-rows: auto;
+	gap: 60px 70px;
+}
+
+/* Row 1 */
+article:nth-of-type(1){ grid-column: 1; grid-row: 1; }
+article:nth-of-type(2){ grid-column: 2; grid-row: 1; }
+article:nth-of-type(3){ grid-column: 3; grid-row: 1; }
+article:nth-of-type(4){ grid-column: 4; grid-row: 1; }
+
+/* Row 2 (3 per row) */
+article:nth-of-type(5){ grid-column: 1; grid-row: 2; }
+article:nth-of-type(6){ grid-column: 2; grid-row: 2; }
+article:nth-of-type(7){ grid-column: 3; grid-row: 2; }
+
+/* THANK YOU under Article 4 (column 4, row 2) */
+#thanks{
+	grid-column: 4;
+	grid-row: 2;
+
+	width: 420px;        /* longer box */
+	padding: 18px 22px;
+
+	background: #78c7ff;
+	border: 2px solid #1f4e79;
+	text-align: center;
+
+	justify-self: start;
+	align-self: start;
+}
+
+#thanks a{
+	font-family: "Times New Roman", Times, serif;
+	font-size: 36px;
+	color: #0033cc;
+	text-decoration: underline;
+}
+
+/* Row 3 (8 under 5, 9 under 6, 10 under 7) */
+article:nth-of-type(8){ grid-column: 1; grid-row: 3; }
+article:nth-of-type(9){ grid-column: 2; grid-row: 3; }
+article:nth-of-type(10){ grid-column: 3; grid-row: 3; }
+/* column 4 in row 3 intentionally empty */
+
+/* -----------------------------
+   ARTICLE STYLING + TRANSITION
+-------------------------------- */
+article{
+	color: #b8b8b8;                 /* light text initially */
+	transition: color 2s, transform 2s;
+	transform-origin: center top;
+	position: relative;
+	z-index: 1;
+}
+
+article h2{
+	margin: 0 0 10px;
+	font-size: 22px;
+	color: #b8b8b8;
+	font-family: "Times New Roman", Times, serif;
+}
+
+article:hover{
+	color: #111;                    /* darker text on hover */
+	transform: scale(1.08);         /* expand */
+	z-index: 5;
+}
+
+article:hover h2{
+	color: #111;
+}
+
+/* -----------------------------
+   DROP CAP (first paragraph only)
+-------------------------------- */
+article > p:first-of-type::first-letter{
+	font-family: "Times New Roman", Times, serif;
+	font-size: 36px;
+	line-height: 1;
+}
+
+/* -----------------------------
+   GOOGLE LINK ARROW ICON
+-------------------------------- */
+a[href*="google.com"]::after{
+	content: "";
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	margin-left: 6px;
+	vertical-align: text-bottom;
+	background-image: url("https://upload.wikimedia.org/wikipedia/commons/6/64/Icon_External_Link.svg");
+	background-size: contain;
+	background-repeat: no-repeat;
+}
+
+/* -----------------------------
+   FOOTER
+-------------------------------- */
+footer{
+	margin-top: 25px;
+	border-top: 2px solid #ddd;
+	padding: 20px 5%;
+	font-family: "Times New Roman", Times, serif;
+}
