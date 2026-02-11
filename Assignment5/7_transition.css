@@ -132,8 +132,8 @@ article:nth-of-type(7){ grid-column: 3; grid-row: 2; }
 	bottom: 20px;      /* distance from bottom */
 	right: 20px;       /* distance from right */
 
-	width: 200px;
-	padding: 9px 13px;
+	width: 250px;
+	padding: 10px 14px;
 
 	background:#78c7ff;
 	border:2px solid #1f4e79;
