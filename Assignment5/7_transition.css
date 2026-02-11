@@ -159,21 +159,26 @@ a[href*="google.com"]::after{
    THANK YOU BOX (BOTTOM RIGHT)
 -------------------------------- */
 #thanks{
-	grid-column:4;   /* RIGHT SIDE */
-	grid-row:2;      /* UNDER ARTICLE 4 */
+	grid-column: 4;     /* last column */
+	grid-row: 2;        /* second row */
+	
+	width: 320px;       /* restore small box size */
+	justify-self: end;  /* push it to the right */
+	align-self: start;  /* align to top of that row */
 
-	background:#78c7ff;
-	border:2px solid #1f4e79;
-	text-align:center;
-	padding:18px 20px;
+	background: #78c7ff;
+	border: 2px solid #1f4e79;
+	text-align: center;
+	padding: 12px 15px;
 }
 
 #thanks a{
-	font-family:"Times New Roman", Times, serif;
-	font-size:40px;
-	color:#0033cc;
-	text-decoration:underline;
+	font-family: "Times New Roman", Times, serif;
+	font-size: 36px;    /* REQUIRED 36px */
+	color: #0033cc;
+	text-decoration: underline;
 }
+
 
 /* -----------------------------
    FOOTER
