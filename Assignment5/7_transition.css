@@ -123,28 +123,30 @@ article:nth-of-type(5){ grid-column: 1; grid-row: 2; }
 article:nth-of-type(6){ grid-column: 2; grid-row: 2; }
 article:nth-of-type(7){ grid-column: 3; grid-row: 2; }
 
-/* THANK YOU under Article 4 (column 4, row 2) */
-#thanks{
-	grid-column: 4;
-	grid-row: 2;
+/* THANK YOU BOX - UNDER ARTICLE 4 */
 
-	width: 420px;        /* longer box */
+#thanks{
+	grid-column: 4;     /* column under article 4 */
+	grid-row: 2;        /* second row (empty space) */
+
+	width: 85%;         /* keeps it inside the grid cell */
 	padding: 18px 22px;
 
-	background: #78c7ff;
-	border: 2px solid #1f4e79;
-	text-align: center;
+	background:#78c7ff;
+	border:2px solid #1f4e79;
+	text-align:center;
 
-	justify-self: start;
-	align-self: start;
+	justify-self:center;  /* center inside that empty space */
+	align-self:start;
 }
 
 #thanks a{
-	font-family: "Times New Roman", Times, serif;
-	font-size: 36px;
-	color: #0033cc;
-	text-decoration: underline;
+	font-family:"Times New Roman", Times, serif;
+	font-size:36px;
+	color:#0033cc;
+	text-decoration:underline;
 }
+
 
 /* Row 3 (8 under 5, 9 under 6, 10 under 7) */
 article:nth-of-type(8){ grid-column: 1; grid-row: 3; }
