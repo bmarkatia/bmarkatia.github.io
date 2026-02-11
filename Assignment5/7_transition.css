@@ -125,20 +125,22 @@ article:nth-of-type(7){ grid-column: 3; grid-row: 2; }
 
 /* THANK YOU BOX - UNDER ARTICLE 4 */
 
-#thanks{
-	grid-column: 4;     /* column under article 4 */
-	grid-row: 2;        /* second row (empty space) */
+/* THANK YOU BOX — BOTTOM RIGHT CORNER */
 
-	width: 85%;         /* keeps it inside the grid cell */
+#thanks{
+	position: fixed;   /* removes it from grid completely */
+	bottom: 20px;      /* distance from bottom */
+	right: 20px;       /* distance from right */
+
+	width: 360px;
 	padding: 18px 22px;
 
 	background:#78c7ff;
 	border:2px solid #1f4e79;
 	text-align:center;
-
-	justify-self:center;  /* center inside that empty space */
-	align-self:start;
+	z-index:999;
 }
+
 
 #thanks a{
 	font-family:"Times New Roman", Times, serif;
