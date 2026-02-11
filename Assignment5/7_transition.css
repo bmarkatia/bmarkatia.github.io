@@ -38,7 +38,7 @@ header p{
 h1{
 	font-family: "Times New Roman", Times, serif;
 	text-align: center;
-	font-size: 50px;
+	font-size: 36px;
 	margin: 35px 0 25px;
 }
 
@@ -123,28 +123,32 @@ article:nth-of-type(5){ grid-column: 1; grid-row: 2; }
 article:nth-of-type(6){ grid-column: 2; grid-row: 2; }
 article:nth-of-type(7){ grid-column: 3; grid-row: 2; }
 
-/* THANK YOU under Article 4 (column 4, row 2) */
+/* THANK YOU BOX - UNDER ARTICLE 4 */
+
+/* THANK YOU BOX — BOTTOM RIGHT CORNER */
+
 #thanks{
-	grid-column: 4;
-	grid-row: 2;
+	position: fixed;   /* removes it from grid completely */
+	bottom: 20px;      /* distance from bottom */
+	right: 20px;       /* distance from right */
 
-	width: 420px;        /* longer box */
-	padding: 18px 22px;
+	width: 280px;
+	padding: 12px 16px;
 
-	background: #78c7ff;
-	border: 2px solid #1f4e79;
-	text-align: center;
-
-	justify-self: start;
-	align-self: start;
+	background:#78c7ff;
+	border:2px solid #1f4e79;
+	text-align:center;
+	z-index:999;
 }
+
 
 #thanks a{
-	font-family: "Times New Roman", Times, serif;
-	font-size: 36px;
-	color: #0033cc;
-	text-decoration: underline;
+	font-family:"Times New Roman", Times, serif;
+	font-size:36px;
+	color:#0033cc;
+	text-decoration:underline;
 }
+
 
 /* Row 3 (8 under 5, 9 under 6, 10 under 7) */
 article:nth-of-type(8){ grid-column: 1; grid-row: 3; }
