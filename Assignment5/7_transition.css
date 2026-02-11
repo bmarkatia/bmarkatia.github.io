@@ -124,30 +124,30 @@ article:nth-of-type(6){ grid-column: 2; grid-row: 2; }
 article:nth-of-type(7){ grid-column: 3; grid-row: 2; }
 
 /* THANK YOU BOX - UNDER ARTICLE 4 */
-
+/* THANK YOU BOX — HALF WIDTH, LONGER, ONE LINE */
 
 #thanks{
 	grid-column: 4;     /* under Article 4 */
 	grid-row: 2;
 
-	width: 100%;        /* fills entire grid column */
-	padding: 12px 16px;
+	width: 50%;         /* HALF the column width */
+	padding: 12px 18px;
 
 	background:#78c7ff;
 	border:2px solid #1f4e79;
 	text-align:center;
 
-	justify-self: stretch;   /* makes it reach right edge */
-	align-self:start;
+	justify-self: end;  /* pushes box to the RIGHT */
+	align-self: start;
 }
 
-/* ONE-LINE TEXT */
+/* Keep text on ONE LINE */
 #thanks a{
 	font-family:"Times New Roman", Times, serif;
-	font-size:16px;     /* smaller so it stays one line */
-	white-space:nowrap; /* prevents wrapping */
+	font-size:24px;     /* small enough to fit one line */
+	white-space: nowrap;
 	color:#0033cc;
-	text-decoration:underline;
+	text-decoration: underline;
 }
 
 
