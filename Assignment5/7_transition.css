@@ -1,194 +1,186 @@
-/* 7_transition.css */
-
 /* -----------------------------
-   Overall layout: left nav + main content
+   PAGE LAYOUT
 -------------------------------- */
 body{
-	margin: 0;
+	margin:0;
+	display:flex;
 	font-family: Arial, Helvetica, sans-serif;
-	background: #fff;
-	display: flex;                 /* nav on left, main on right */
-}
-
-main{
-	flex: 1;
-	padding: 0 0 40px;
 }
 
 /* -----------------------------
-   Header (red bar)
--------------------------------- */
-header{
-	background: red;
-	height: 110px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
-
-header p{
-	margin: 0;
-	font-size: 52px;
-	font-family: "Comic Sans MS", "Trebuchet MS", sans-serif; /* close to screenshot vibe */
-	font-weight: bold;
-	color: #000;
-}
-
-/* Big title */
-h1{
-	font-family: "Times New Roman", Times, serif;
-	text-align: center;
-	font-size: 50px;
-	margin: 35px 0 25px;
-}
-
-/* -----------------------------
-   Left navigation menu
+   LEFT NAVIGATION
 -------------------------------- */
 #menuItems{
-	width: 240px;
-	background: #000;
-	padding: 0;
-	min-height: 100vh;
+	width:240px;
+	background:#000;
+	min-height:100vh;
 }
 
-/* buttons */
 #menuItems button{
-	display: block;
-	width: 100%;
-	border: 1px solid #111;
-	background: #0017ff;
-	color: #fff;
-	font-size: 22px;
-	padding: 14px 10px;
-	cursor: pointer;
+	display:block;
+	width:100%;
+	background:#0017ff;
+	color:#fff;
+	border:1px solid #111;
+	font-size:22px;
+	padding:14px 10px;
+	cursor:pointer;
 }
 
 #menuItems button:hover{
-	background: #b8860b;  /* gold */
+	background:#b8860b;
 }
 
 /* -----------------------------
-   Jump menu (dropdown list under Recent Articles)
-   (pushes the other buttons down, like your screenshot)
+   JUMP MENU (dropdown)
 -------------------------------- */
 #jumpMenu{
-	list-style: none;
-	margin: 0;
-	padding: 12px 0;
-	background: #b8860b;
-	display: none;
+	list-style:none;
+	margin:0;
+	padding:12px 0;
+	background:#b8860b;
+	display:none;
 }
 
 #recentArticles:hover + #jumpMenu,
 #jumpMenu:hover{
-	display: block;
+	display:block;
 }
 
 #jumpMenu a{
-	display: block;
-	padding: 2px 18px;
-	color: #0b1cff;
-	text-decoration: none;
-	font-size: 20px;
+	display:block;
+	padding:2px 18px;
+	color:#0b1cff;
+	text-decoration:none;
+	font-size:20px;
 }
 
 #jumpMenu a:hover{
-	background: #0017ff;
-	color: #fff;
+	background:#0017ff;
+	color:#fff;
 }
 
 /* -----------------------------
-   Article grid layout
+   MAIN CONTENT AREA
+-------------------------------- */
+main{
+	flex:1;
+}
+
+/* -----------------------------
+   HEADER
+-------------------------------- */
+header{
+	background:red;
+	height:110px;
+	display:flex;
+	align-items:center;
+	justify-content:center;
+}
+
+header p{
+	font-family:"Times New Roman", Times, serif; /* REQUIRED FIX */
+	font-size:52px;
+	color:#000;
+	margin:0;
+}
+
+/* Title */
+h1{
+	font-family:"Times New Roman", Times, serif;
+	text-align:center;
+	font-size:50px;
+	margin:35px 0 25px;
+}
+
+/* -----------------------------
+   ARTICLE GRID
 -------------------------------- */
 #container{
-	width: 90%;
-	margin: 0 auto;
-	display: grid;
-	grid-template-columns: repeat(4, 1fr);
-	gap: 60px 70px; /* row gap, column gap */
+	width:90%;
+	margin:0 auto;
+	display:grid;
+	grid-template-columns:repeat(4,1fr);
+	gap:60px 70px;
 }
 
-/* article headings default */
-article h2{
-	margin: 0 0 10px;
-	font-size: 22px;
-	color: #b8b8b8;
-	font-family: "Times New Roman", Times, serif;
-}
-
-/* article text default */
+/* Articles default */
 article{
-	color: #b8b8b8;
-	transition: color 2s, transform 2s;
-	position: relative;
-	z-index: 1;
-	transform-origin: center top;
+	color:#b8b8b8;
+	transition:color 2s, transform 2s;
+	transform-origin:center top;
+	position:relative;
+	z-index:1;
 }
 
-/* hover: darker + expand over 2s */
+article h2{
+	font-family:"Times New Roman", Times, serif;
+	font-size:22px;
+	margin:0 0 10px;
+	color:#b8b8b8;
+}
+
+/* Hover effect */
 article:hover{
-	color: #111;
-	transform: scale(1.08);
-	z-index: 5;
+	color:#111;
+	transform:scale(1.08);
+	z-index:5;
 }
 
 article:hover h2{
-	color: #111;
+	color:#111;
 }
 
 /* -----------------------------
-   Drop cap (ONLY main text paragraph)
-   - first <p> inside each article
-   - does NOT affect the "Read more..." paragraph
+   DROP CAP FIRST LETTER
 -------------------------------- */
 article > p:first-of-type::first-letter{
-	font-family: "Times New Roman", Times, serif;
-	font-size: 36px;
-	line-height: 1;
+	font-family:"Times New Roman", Times, serif;
+	font-size:36px;
+	line-height:1;
 }
 
 /* -----------------------------
-   "Read more..." Google link arrow (Wikipedia hosted icon)
+   GOOGLE LINK ARROW
 -------------------------------- */
-
 a[href*="google.com"]::after{
-	content: "";
-	display: inline-block;
-	width: 16px;
-	height: 16px;
-	margin-left: 6px;
-	vertical-align: text-bottom;
-	background-image: url("https://upload.wikimedia.org/wikipedia/commons/6/64/Icon_External_Link.svg");
-	background-size: contain;
-	background-repeat: no-repeat;
+	content:"";
+	display:inline-block;
+	width:16px;
+	height:16px;
+	margin-left:6px;
+	vertical-align:text-bottom;
+	background-image:url("https://upload.wikimedia.org/wikipedia/commons/6/64/Icon_External_Link.svg");
+	background-size:contain;
+	background-repeat:no-repeat;
 }
 
 /* -----------------------------
-   Thank-you box
+   THANK YOU BOX (BOTTOM RIGHT)
 -------------------------------- */
 #thanks{
-	margin: 35px auto 0;
-	width: 380px;
-	background: #78c7ff;
-	border: 2px solid #1f4e79;
-	text-align: center;
-	padding: 18px 20px;
+	grid-column:4;   /* RIGHT SIDE */
+	grid-row:2;      /* UNDER ARTICLE 4 */
+
+	background:#78c7ff;
+	border:2px solid #1f4e79;
+	text-align:center;
+	padding:18px 20px;
 }
 
 #thanks a{
-	font-family: "Times New Roman", Times, serif;
-	font-size: 40px;
-	color: #0033cc;
-	text-decoration: underline;
+	font-family:"Times New Roman", Times, serif;
+	font-size:40px;
+	color:#0033cc;
+	text-decoration:underline;
 }
 
 /* -----------------------------
-   Footer (simple)
+   FOOTER
 -------------------------------- */
 footer{
-	margin-top: 25px;
-	border-top: 2px solid #ddd;
-	padding: 20px 5%;
-	font-family: "Times New Roman", Times, serif;
+	margin-top:25px;
+	border-top:2px solid #ddd;
+	padding:20px 5%;
+	font-family:"Times New Roman", Times, serif;
 }
