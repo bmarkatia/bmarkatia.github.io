@@ -160,27 +160,35 @@ a[href*="google.com"]::after{
 -------------------------------- */
 /* THANK YOU BOX - fixed bottom right */
 
+/* HIDE ARTICLE 8 (creates space for thank you box) */
+article:nth-of-type(8){
+	display:none;
+}
+
+
+/* THANK YOU BOX UNDER ARTICLE 4 */
 #thanks{
-	position: fixed;
-	bottom: 20px;
-	right: 20px;
+	grid-column: 4;        /* same column as article 4 */
+	grid-row: 2;           /* second row */
 
-	width: 260px;
-	padding: 12px 15px;
+	width: 420px;          /* longer box */
+	padding: 18px 20px;
 
-	background: #78c7ff;
-	border: 2px solid #1f4e79;
-	text-align: center;
+	background:#78c7ff;
+	border:2px solid #1f4e79;
+	text-align:center;
 
-	transition: opacity 0.5s ease;
+	justify-self:start;
+	align-self:start;
 }
 
 #thanks a{
-	font-family: "Times New Roman", Times, serif;
-	font-size: 28px;
-	color: #0033cc;
-	text-decoration: underline;
+	font-family:"Times New Roman", Times, serif;
+	font-size:36px;
+	color:#0033cc;
+	text-decoration:underline;
 }
+
 
 
 
