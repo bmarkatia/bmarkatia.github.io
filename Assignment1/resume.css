@@ -1,0 +1,114 @@
+/* ===== Week 4: Responsive Resume CSS (NO frameworks) ===== */
+
+/* --- reset --- */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body{
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.55;
+  background: #f3f4f6;
+  color: #111827;
+}
+
+/* --- mobile-first layout (works at 412px) --- */
+header, main, footer{
+  width: min(900px, 100%);
+  margin: 0 auto;
+  padding: 16px;
+}
+
+header{
+  background: #111827;
+  color: #ffffff;
+  border-bottom: 4px solid #e5e7eb;
+}
+
+header h1{ font-size: 28px; margin-bottom: 6px; }
+header p{ font-size: 14px; margin-top: 4px; }
+header a{ color: #93c5fd; text-decoration: none; }
+header a:hover{ text-decoration: underline; }
+
+main{
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-top: none;
+}
+
+section{ padding: 14px 0; border-bottom: 1px solid #e5e7eb; }
+section:last-child{ border-bottom: none; }
+
+h2{
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+h3{
+  font-size: 16px;
+  margin: 10px 0 4px;
+}
+
+p{ margin: 6px 0; }
+ul{ margin: 6px 0 0 18px; }
+li{ margin: 4px 0; }
+
+footer{
+  font-size: 13px;
+  color: #374151;
+  text-align: center;
+}
+
+/* Make project images responsive (project1-2.html / project2-2.html) */
+img{
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin-top: 10px;
+  border: 1px solid #e5e7eb;
+}
+
+/* ===== desktop/laptop layout (different from mobile) =====
+   This kicks in for larger screens (covers 1920px) */
+@media (min-width: 900px){
+  body{ padding: 24px 0; }
+
+  header, main, footer{
+    width: min(1100px, 100%);
+  }
+
+  header{
+    border-radius: 10px 10px 0 0;
+  }
+
+  main{
+    border-radius: 0 0 10px 10px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    display: grid;
+    grid-template-columns: 320px 1fr; /* left column + right column */
+    gap: 18px;
+    padding: 18px;
+  }
+
+  /* Place sections into columns WITHOUT changing your HTML:
+     index-3.html sections order is:
+     1 Objective, 2 Education, 3 Experience, 4 Projects, 5 Skills */
+  main > section:nth-child(4),
+  main > section:nth-child(5){
+    grid-column: 1;            /* left column */
+    align-self: start;
+  }
+
+  main > section:nth-child(1),
+  main > section:nth-child(2),
+  main > section:nth-child(3){
+    grid-column: 2;            /* right column */
+  }
+
+  section{
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 14px;
+  }
+
+  /* keep footer aligned with the "card" */
+  footer{ padding-top: 10px; }
+}
