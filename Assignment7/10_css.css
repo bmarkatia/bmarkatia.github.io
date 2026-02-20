@@ -31,7 +31,7 @@ form#newContent{
 }
 
 form#filterContent{
-    display: block;
+    display: none;
     margin: auto;
 }
 
@@ -214,3 +214,4 @@ nav button:active{
         width: 100%;
     }
 }
+
