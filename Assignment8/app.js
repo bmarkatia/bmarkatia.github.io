@@ -1,274 +1,124 @@
-// Pokemon Team Builder (vanilla JS)
-// Uses PokeAPI: https://pokeapi.co/api/v2/pokemon/{id or name}
+const cache = {};
+let currentPokemon = null;
 
-const API_BASE = "https://pokeapi.co/api/v2/pokemon/";
+const input = document.getElementById('pokemon-input');
+const findBtn = document.getElementById('find-btn');
+const img = document.getElementById('pokemon-img');
+const nameEl = document.getElementById('pokemon-name');
+const audio = document.getElementById('pokemon-audio');
+const selects = [
+  document.getElementById('move1'),
+  document.getElementById('move2'),
+  document.getElementById('move3'),
+  document.getElementById('move4'),
+];
+const addBtn = document.getElementById('add-btn');
+const errorMsg = document.getElementById('error-msg');
+const teamTable = document.getElementById('team-table');
+const teamBody = document.getElementById('team-body');
 
-// Cache settings (localStorage) to reduce calls
-const CACHE_PREFIX = "poke_cache_v1:";
-const CACHE_TTL_MS = 1000 * 60 * 60 * 24; // 24 hours
+findBtn.addEventListener('click', fetchPokemon);
+input.addEventListener('keydown', e => { if (e.key === 'Enter') fetchPokemon(); });
 
-const el = (id) => document.getElementById(id);
+async function fetchPokemon() {
+  const query = input.value.trim().toLowerCase();
+  if (!query) return;
 
-const queryInput = el("query");
-const findBtn = el("findBtn");
-const addBtn = el("addBtn");
-const clearBtn = el("clearBtn");
-const statusEl = el("status");
+  errorMsg.style.display = 'none';
+  findBtn.textContent = 'Loading...';
+  findBtn.disabled = true;
 
-const spriteImg = el("sprite");
-const cryAudio = el("cry");
-
-const moveSelects = [el("move1"), el("move2"), el("move3"), el("move4")];
-const teamBody = el("teamBody");
-
-let currentPokemon = null; // { id, name, spriteUrl, cryUrl, moveNames[] }
-let team = []; // saved entries
-
-function setStatus(msg) {
-  statusEl.textContent = msg || "";
-}
-
-function normalizeQuery(q) {
-  return (q || "").trim().toLowerCase();
-}
-
-function cacheKey(q) {
-  return `${CACHE_PREFIX}${q}`;
-}
-
-function readCache(q) {
-  try {
-    const raw = localStorage.getItem(cacheKey(q));
-    if (!raw) return null;
-    const parsed = JSON.parse(raw);
-
-    if (!parsed.savedAt || !parsed.data) return null;
-
-    const age = Date.now() - parsed.savedAt;
-    if (age > CACHE_TTL_MS) {
-      localStorage.removeItem(cacheKey(q));
-      return null;
+  let data;
+  if (cache[query]) {
+    data = cache[query];
+  } else {
+    try {
+      const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${query}`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      data = await res.json();
+      cache[query] = data;
+    } catch (err) {
+      errorMsg.textContent = `Pokémon "${query}" not found. Check the spelling and try again.`;
+      errorMsg.style.display = 'block';
+      img.style.display = 'none';
+      nameEl.style.display = 'none';
+      audio.src = '';
+      selects.forEach(s => { s.innerHTML = ''; });
+      currentPokemon = null;
+      findBtn.textContent = 'Find';
+      findBtn.disabled = false;
+      return;
     }
-    return parsed.data;
-  } catch {
-    return null;
-  }
-}
-
-function writeCache(q, data) {
-  try {
-    localStorage.setItem(cacheKey(q), JSON.stringify({ savedAt: Date.now(), data }));
-  } catch {
-    // ignore storage errors
-  }
-}
-
-function resetUIForNewSearch() {
-  currentPokemon = null;
-
-  spriteImg.style.display = "none";
-  spriteImg.src = "";
-
-  cryAudio.style.display = "none";
-  cryAudio.src = "";
-
-  moveSelects.forEach((s) => {
-    s.innerHTML = "";
-    s.disabled = true;
-  });
-
-  addBtn.disabled = true;
-}
-
-function fillMoveDropdowns(moveNames) {
-  const options = ["-- choose a move --", ...moveNames];
-
-  moveSelects.forEach((select) => {
-    select.disabled = false;
-    select.innerHTML = "";
-
-    options.forEach((name, idx) => {
-      const opt = document.createElement("option");
-      opt.value = idx === 0 ? "" : name;
-      opt.textContent = name;
-      select.appendChild(opt);
-    });
-  });
-}
-
-async function fetchPokemon(q) {
-  const cached = readCache(q);
-  if (cached) return cached;
-
-  const url = `${API_BASE}${encodeURIComponent(q)}/`;
-  const resp = await fetch(url);
-
-  if (!resp.ok) {
-    throw new Error(`Pokemon not found: ${q} (HTTP ${resp.status})`);
   }
 
-  const data = await resp.json();
-  writeCache(q, data);
-  return data;
-}
+  findBtn.textContent = 'Find';
+  findBtn.disabled = false;
 
-function buildPokemonFromApi(data) {
-  const id = data.id;
-  const name = data.name;
+  currentPokemon = data;
 
-  const spriteUrl =
-    data?.sprites?.front_default ||
-    data?.sprites?.other?.["official-artwork"]?.front_default ||
-    "";
-
-  const cryUrl =
-    data?.cries?.latest ||
-    data?.cries?.legacy ||
-    "";
-
-  const moveNames = (data.moves || [])
-    .map((m) => m?.move?.name)
-    .filter(Boolean);
-
-  return { id, name, spriteUrl, cryUrl, moveNames };
-}
-
-function showPokemon(p) {
   // Image
-  if (p.spriteUrl) {
-    spriteImg.src = p.spriteUrl;
-    spriteImg.alt = `${p.name} sprite`;
-    spriteImg.style.display = "block";
-  } else {
-    spriteImg.style.display = "none";
-  }
+  const spriteUrl = data.sprites?.other?.['official-artwork']?.front_default
+    || data.sprites?.front_default;
+  img.src = spriteUrl || '';
+  img.style.display = spriteUrl ? 'block' : 'none';
 
-  // Audio
-  if (p.cryUrl) {
-    cryAudio.src = p.cryUrl;
-    cryAudio.load();
-    cryAudio.style.display = "block";
-  } else {
-    cryAudio.style.display = "none";
-  }
+  // Name
+  nameEl.textContent = data.name.toUpperCase();
+  nameEl.style.display = 'block';
 
-  // Moves
-  fillMoveDropdowns(p.moveNames);
+  // Cry
+  const cryUrl = data.cries?.latest || data.cries?.legacy || '';
+  audio.src = cryUrl;
 
-  addBtn.disabled = false;
-}
-
-function getChosenMoves() {
-  return moveSelects.map((s) => s.value.trim());
-}
-
-function renderTeam() {
-  teamBody.innerHTML = "";
-
-  // One row per Pokemon, like your sample
-  team.forEach((entry, idx) => {
-    const tr = document.createElement("tr");
-    const td = document.createElement("td");
-
-    const wrap = document.createElement("div");
-    wrap.className = "teamRow";
-
-    const img = document.createElement("img");
-    img.src = entry.spriteUrl || "";
-    img.alt = entry.name;
-
-    const ul = document.createElement("ul");
-    ul.className = "movesList";
-
-    entry.moves.forEach((mv) => {
-      const li = document.createElement("li");
-      li.textContent = mv;
-      ul.appendChild(li);
+  // Moves - populate all 4 selects with all moves
+  const moves = data.moves.map(m => m.move.name);
+  selects.forEach(s => {
+    s.innerHTML = '';
+    moves.forEach(m => {
+      const opt = document.createElement('option');
+      opt.value = m;
+      opt.textContent = m;
+      s.appendChild(opt);
     });
-
-    wrap.appendChild(img);
-    wrap.appendChild(ul);
-
-    td.appendChild(wrap);
-    tr.appendChild(td);
-
-    teamBody.appendChild(tr);
   });
+
+  // Set different default starting moves
+  if (moves.length > 1) selects[1].selectedIndex = Math.min(1, moves.length - 1);
+  if (moves.length > 2) selects[2].selectedIndex = Math.min(2, moves.length - 1);
+  if (moves.length > 3) selects[3].selectedIndex = Math.min(3, moves.length - 1);
 }
 
-async function onFindClick() {
-  const q = normalizeQuery(queryInput.value);
-
-  if (!q) {
-    setStatus("Enter a Pokemon name or ID.");
-    return;
-  }
-
-  resetUIForNewSearch();
-  setStatus("Loading...");
-
-  try {
-    const apiData = await fetchPokemon(q);
-    const p = buildPokemonFromApi(apiData);
-
-    if (!p.moveNames.length) {
-      setStatus(`Loaded ${p.name} (#${p.id}), but no moves found.`);
-    } else {
-      setStatus(`Loaded ${p.name} (#${p.id}). Choose 4 moves.`);
-    }
-
-    currentPokemon = p;
-    showPokemon(p);
-  } catch (err) {
-    console.error(err);
-    setStatus("Could not find that Pokemon. Try a valid name or an ID number.");
-  }
-}
-
-function onAddToTeam() {
+addBtn.addEventListener('click', () => {
   if (!currentPokemon) return;
 
-  const chosen = getChosenMoves();
+  const selectedMoves = selects.map(s => s.value).filter(Boolean);
+  if (selectedMoves.length === 0) return;
 
-  // Require a selection in each dropdown
-  if (chosen.some((mv) => mv.length === 0)) {
-    setStatus("Pick a move in all 4 dropdowns before adding to team.");
-    return;
+  const spriteUrl = currentPokemon.sprites?.front_default || '';
+
+  const row = document.createElement('tr');
+
+  const imgTd = document.createElement('td');
+  if (spriteUrl) {
+    const teamImg = document.createElement('img');
+    teamImg.src = spriteUrl;
+    teamImg.classList.add('team-img');
+    imgTd.appendChild(teamImg);
   }
 
-  // Optional: classic team size limit (you can remove if not wanted)
-  if (team.length >= 6) {
-    setStatus("Team is full (max 6). Clear team to add more.");
-    return;
-  }
-
-  team.push({
-    id: currentPokemon.id,
-    name: currentPokemon.name,
-    spriteUrl: currentPokemon.spriteUrl,
-    moves: chosen
+  const movesTd = document.createElement('td');
+  const ul = document.createElement('ul');
+  ul.classList.add('move-list');
+  selectedMoves.forEach(m => {
+    const li = document.createElement('li');
+    li.textContent = m;
+    ul.appendChild(li);
   });
+  movesTd.appendChild(ul);
 
-  renderTeam();
-  setStatus(`Added ${currentPokemon.name} to team.`);
-}
+  row.appendChild(imgTd);
+  row.appendChild(movesTd);
+  teamBody.appendChild(row);
 
-function onClearTeam() {
-  team = [];
-  renderTeam();
-  setStatus("Team cleared.");
-}
-
-findBtn.addEventListener("click", onFindClick);
-addBtn.addEventListener("click", onAddToTeam);
-clearBtn.addEventListener("click", onClearTeam);
-
-// Press Enter in the input to search
-queryInput.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") onFindClick();
+  teamTable.style.display = 'table';
 });
-
-// init
-resetUIForNewSearch();
-renderTeam();
-setStatus("Ready.");
