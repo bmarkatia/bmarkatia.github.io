@@ -1,4 +1,8 @@
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
 :root {
   --sky: #a8d8ea;
@@ -37,7 +41,7 @@ h1 {
   padding: 28px 32px 32px;
   width: 100%;
   max-width: 520px;
-  box-shadow: 0 8px 40px rgba(0,0,0,0.13), 0 2px 8px rgba(212,160,23,0.15);
+  box-shadow: 0 8px 40px rgba(0,0,0,0.13);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -62,7 +66,6 @@ h1 {
 .search-input-row {
   display: flex;
   gap: 8px;
-  width: 100%;
   justify-content: center;
 }
 
@@ -77,7 +80,10 @@ h1 {
   outline: none;
   transition: border-color 0.2s;
 }
-#pokemon-input:focus { border-color: var(--gold); }
+
+#pokemon-input:focus {
+  border-color: var(--gold);
+}
 
 #find-btn {
   padding: 8px 18px;
@@ -88,16 +94,25 @@ h1 {
   font-size: 14px;
   font-weight: 800;
   cursor: pointer;
-  transition: background 0.15s, border-color 0.15s;
+  transition: background 0.15s;
 }
-#find-btn:hover { background: #d0d0d0; border-color: #888; }
+
+#find-btn:hover { background: #d0d0d0; }
 #find-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+#error-msg {
+  color: #c0392b;
+  font-weight: 700;
+  font-size: 13px;
+  display: none;
+  text-align: center;
+}
 
 #pokemon-display {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
 }
 
 #pokemon-img {
@@ -115,7 +130,9 @@ h1 {
   display: none;
 }
 
-#pokemon-audio { width: 300px; }
+#pokemon-audio {
+  width: 300px;
+}
 
 .moves-grid {
   display: grid;
@@ -134,9 +151,11 @@ h1 {
   background: #fafafa;
   cursor: pointer;
   outline: none;
-  transition: border-color 0.2s;
 }
-.moves-grid select:focus { border-color: var(--gold); }
+
+.moves-grid select:focus {
+  border-color: var(--gold);
+}
 
 #add-btn {
   padding: 10px 28px;
@@ -147,16 +166,10 @@ h1 {
   font-size: 14px;
   font-weight: 800;
   cursor: pointer;
-  transition: background 0.15s, border-color 0.15s;
+  transition: background 0.15s;
 }
-#add-btn:hover { background: #d0d0d0; border-color: #888; }
 
-#error-msg {
-  color: #c0392b;
-  font-weight: 700;
-  font-size: 13px;
-  display: none;
-}
+#add-btn:hover { background: #d0d0d0; }
 
 #team-section {
   width: 100%;
@@ -178,14 +191,14 @@ h1 {
   vertical-align: middle;
 }
 
-#team-table .team-img {
+.team-img {
   width: 56px;
   height: 56px;
   object-fit: contain;
   image-rendering: pixelated;
 }
 
-#team-table .move-list {
+.move-list {
   list-style: disc inside;
   font-size: 14px;
   font-weight: 600;
