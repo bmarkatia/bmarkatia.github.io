@@ -2,51 +2,44 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Pokemon Team Builder</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
+
 <body>
-  <main class="card">
-    <h1>Pokemon Team Builder</h1>
+  <main class="outer">
+    <section class="inner">
+      <h1>Name or ID</h1>
 
-    <section class="row">
-      <label for="query">Name or ID</label>
-      <input id="query" type="text" placeholder="e.g., 25 or pikachu" />
-      <button id="findBtn" type="button">Find</button>
-    </section>
+      <div class="searchRow">
+        <input id="query" type="text" placeholder="e.g., 25 or pikachu" />
+        <button id="findBtn" type="button">Find</button>
+      </div>
 
-    <p id="status" class="status" aria-live="polite"></p>
+      <p id="status" class="status" aria-live="polite"></p>
 
-    <section class="viewer">
-      <img id="sprite" alt="Pokemon sprite" />
-      <audio id="cry" controls></audio>
-    </section>
+      <div class="viewer">
+        <img id="sprite" alt="Pokemon sprite" />
+        <audio id="cry" controls></audio>
+      </div>
 
-    <section class="moves">
-      <div class="moveGrid">
+      <div class="movesGrid">
         <select id="move1"></select>
         <select id="move2"></select>
         <select id="move3"></select>
         <select id="move4"></select>
       </div>
-      <button id="addBtn" type="button" disabled>Add to Team</button>
-    </section>
 
-    <hr />
+      <button id="addBtn" type="button" class="addBtn" disabled>Add to Team</button>
 
-    <section>
-      <h2>Team</h2>
-      <table class="teamTable">
-        <thead>
-          <tr>
-            <th>Pokemon</th>
-            <th>Moves</th>
-          </tr>
-        </thead>
-        <tbody id="teamBody"></tbody>
-      </table>
-      <button id="clearBtn" type="button">Clear Team</button>
+      <div class="teamWrap">
+        <table class="teamTable">
+          <tbody id="teamBody"></tbody>
+        </table>
+      </div>
+
+      <button id="clearBtn" type="button" class="clearBtn">Clear Team</button>
     </section>
   </main>
 
