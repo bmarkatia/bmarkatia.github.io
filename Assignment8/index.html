@@ -1,51 +1,53 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pokémon Team Builder</title>
+  <title>Pokemon Team Builder</title>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-<h1>Pokémon Team Builder</h1>
+  <h1>Pokemon Team Builder</h1>
 
-<div class="card">
-  <div class="search-row">
-    <span class="search-label">Name or ID</span>
-    <div class="search-input-row">
-      <input type="text" id="pokemon-input" placeholder="">
-      <button id="find-btn">Find</button>
+  <div class="card">
+
+    <div class="search-row">
+      <span class="search-label">Name or ID</span>
+      <div class="search-input-row">
+        <input type="text" id="pokemon-input" placeholder="e.g. snorlax or 143">
+        <button id="find-btn">Find</button>
+      </div>
     </div>
+
+    <div id="error-msg"></div>
+
+    <div id="pokemon-display">
+      <img id="pokemon-img" alt="Pokemon sprite">
+      <span id="pokemon-name"></span>
+    </div>
+
+    <audio id="pokemon-audio" controls></audio>
+
+    <div class="moves-grid">
+      <select id="move1"></select>
+      <select id="move2"></select>
+      <select id="move3"></select>
+      <select id="move4"></select>
+    </div>
+
+    <button id="add-btn">Add to Team</button>
+
   </div>
 
-  <div id="error-msg"></div>
-
-  <div id="pokemon-display">
-    <img id="pokemon-img" alt="Pokemon sprite">
-    <span id="pokemon-name"></span>
+  <div id="team-section">
+    <table id="team-table">
+      <tbody id="team-body"></tbody>
+    </table>
   </div>
 
-  <audio id="pokemon-audio" controls></audio>
+  <script src="script.js"></script>
 
-  <div class="moves-grid">
-    <select id="move1"></select>
-    <select id="move2"></select>
-    <select id="move3"></select>
-    <select id="move4"></select>
-  </div>
-
-  <button id="add-btn">Add to Team</button>
-</div>
-
-<div id="team-section">
-  <table id="team-table">
-    <tbody id="team-body"></tbody>
-  </table>
-</div>
-
-<script src="script.js"></script>
 </body>
 </html>
