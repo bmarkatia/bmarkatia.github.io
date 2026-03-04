@@ -18,99 +18,117 @@ const teamTable = document.getElementById('team-table');
 const teamBody = document.getElementById('team-body');
 
 findBtn.addEventListener('click', fetchPokemon);
-input.addEventListener('keydown', e => { if (e.key === 'Enter') fetchPokemon(); });
+input.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') fetchPokemon();
+});
 
-async function fetchPokemon() {
-  const query = input.value.trim().toLowerCase();
+function fetchPokemon() {
+  var query = input.value.trim().toLowerCase();
   if (!query) return;
 
   errorMsg.style.display = 'none';
   findBtn.textContent = 'Loading...';
   findBtn.disabled = true;
 
-  let data;
   if (cache[query]) {
-    data = cache[query];
-  } else {
-    try {
-      const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${query}`);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      data = await res.json();
+    displayPokemon(cache[query]);
+    findBtn.textContent = 'Find';
+    findBtn.disabled = false;
+    return;
+  }
+
+  fetch('https://pokeapi.co/api/v2/pokemon/' + query)
+    .then(function(res) {
+      if (!res.ok) throw new Error('Not found');
+      return res.json();
+    })
+    .then(function(data) {
       cache[query] = data;
-    } catch (err) {
-      errorMsg.textContent = `Pokémon "${query}" not found. Check the spelling and try again.`;
+      displayPokemon(data);
+      findBtn.textContent = 'Find';
+      findBtn.disabled = false;
+    })
+    .catch(function() {
+      errorMsg.textContent = 'Pokemon "' + query + '" not found. Check spelling and try again.';
       errorMsg.style.display = 'block';
       img.style.display = 'none';
       nameEl.style.display = 'none';
       audio.src = '';
-      selects.forEach(s => { s.innerHTML = ''; });
+      selects.forEach(function(s) { s.innerHTML = ''; });
       currentPokemon = null;
       findBtn.textContent = 'Find';
       findBtn.disabled = false;
-      return;
-    }
-  }
+    });
+}
 
-  findBtn.textContent = 'Find';
-  findBtn.disabled = false;
-
+function displayPokemon(data) {
   currentPokemon = data;
 
   // Image
-  const spriteUrl = data.sprites?.other?.['official-artwork']?.front_default
-    || data.sprites?.front_default;
-  img.src = spriteUrl || '';
+  var spriteUrl = (data.sprites &&
+    data.sprites.other &&
+    data.sprites.other['official-artwork'] &&
+    data.sprites.other['official-artwork'].front_default)
+    ? data.sprites.other['official-artwork'].front_default
+    : (data.sprites && data.sprites.front_default ? data.sprites.front_default : '');
+
+  img.src = spriteUrl;
   img.style.display = spriteUrl ? 'block' : 'none';
 
   // Name
   nameEl.textContent = data.name.toUpperCase();
   nameEl.style.display = 'block';
 
-  // Cry
-  const cryUrl = data.cries?.latest || data.cries?.legacy || '';
+  // Cry / audio
+  var cryUrl = '';
+  if (data.cries) {
+    cryUrl = data.cries.latest || data.cries.legacy || '';
+  }
   audio.src = cryUrl;
 
-  // Moves - populate all 4 selects with all moves
-  const moves = data.moves.map(m => m.move.name);
-  selects.forEach(s => {
+  // Populate all 4 move dropdowns
+  var moves = data.moves.map(function(m) { return m.move.name; });
+  selects.forEach(function(s) {
     s.innerHTML = '';
-    moves.forEach(m => {
-      const opt = document.createElement('option');
+    moves.forEach(function(m) {
+      var opt = document.createElement('option');
       opt.value = m;
       opt.textContent = m;
       s.appendChild(opt);
     });
   });
 
-  // Set different default starting moves
-  if (moves.length > 1) selects[1].selectedIndex = Math.min(1, moves.length - 1);
-  if (moves.length > 2) selects[2].selectedIndex = Math.min(2, moves.length - 1);
-  if (moves.length > 3) selects[3].selectedIndex = Math.min(3, moves.length - 1);
+  // Stagger default selected moves
+  if (moves.length > 1) selects[1].selectedIndex = 1;
+  if (moves.length > 2) selects[2].selectedIndex = 2;
+  if (moves.length > 3) selects[3].selectedIndex = 3;
 }
 
-addBtn.addEventListener('click', () => {
+addBtn.addEventListener('click', function() {
   if (!currentPokemon) return;
 
-  const selectedMoves = selects.map(s => s.value).filter(Boolean);
+  var selectedMoves = selects.map(function(s) { return s.value; }).filter(Boolean);
   if (selectedMoves.length === 0) return;
 
-  const spriteUrl = currentPokemon.sprites?.front_default || '';
+  var spriteUrl = currentPokemon.sprites && currentPokemon.sprites.front_default
+    ? currentPokemon.sprites.front_default
+    : '';
 
-  const row = document.createElement('tr');
+  var row = document.createElement('tr');
 
-  const imgTd = document.createElement('td');
+  var imgTd = document.createElement('td');
   if (spriteUrl) {
-    const teamImg = document.createElement('img');
+    var teamImg = document.createElement('img');
     teamImg.src = spriteUrl;
     teamImg.classList.add('team-img');
     imgTd.appendChild(teamImg);
   }
 
-  const movesTd = document.createElement('td');
-  const ul = document.createElement('ul');
+  var movesTd = document.createElement('td');
+  var ul = document.createElement('ul');
   ul.classList.add('move-list');
-  selectedMoves.forEach(m => {
-    const li = document.createElement('li');
+  selectedMoves.forEach(function(m) {
+    var li = document.createElement('li');
     li.textContent = m;
     ul.appendChild(li);
   });
