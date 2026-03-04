@@ -5,14 +5,39 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pokemon Team Builder</title>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --sky: #a8d8ea; --card-bg: #ffffff; --gold: #d4a017; --text: #2c2c54; --row-border: #333; }
+    body { min-height: 100vh; background: var(--sky); background-image: radial-gradient(circle at 20% 20%, #c9e8f5 0%, #a8d8ea 60%, #8ecae6 100%); display: flex; flex-direction: column; align-items: center; padding: 30px 16px 60px; font-family: 'Nunito', sans-serif; color: var(--text); }
+    h1 { font-family: 'Press Start 2P', monospace; font-size: clamp(10px, 2.5vw, 18px); color: var(--text); text-shadow: 3px 3px 0 var(--gold); margin-bottom: 24px; letter-spacing: 1px; text-align: center; }
+    .card { background: var(--card-bg); border: 4px solid var(--gold); border-radius: 28px; padding: 28px 32px 32px; width: 100%; max-width: 520px; box-shadow: 0 8px 40px rgba(0,0,0,0.13); display: flex; flex-direction: column; align-items: center; gap: 18px; }
+    .search-row { display: flex; flex-direction: column; align-items: center; gap: 6px; width: 100%; }
+    .search-label { font-family: 'Press Start 2P', monospace; font-size: 9px; color: var(--text); letter-spacing: 1px; }
+    .search-input-row { display: flex; gap: 8px; justify-content: center; }
+    #pokemon-input { padding: 8px 14px; border: 2px solid #ccc; border-radius: 8px; font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 700; width: 220px; outline: none; }
+    #pokemon-input:focus { border-color: var(--gold); }
+    #find-btn, #add-btn { padding: 8px 18px; background: #e8e8e8; border: 2px solid #aaa; border-radius: 8px; font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 800; cursor: pointer; }
+    #find-btn:hover, #add-btn:hover { background: #d0d0d0; }
+    #find-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    #add-btn { border-radius: 10px; padding: 10px 28px; }
+    #error-msg { color: #c0392b; font-weight: 700; font-size: 13px; display: none; text-align: center; }
+    #pokemon-display { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    #pokemon-img { width: 140px; height: 140px; object-fit: contain; image-rendering: pixelated; display: none; }
+    #pokemon-name { font-family: 'Press Start 2P', monospace; font-size: 10px; color: var(--text); display: none; }
+    #pokemon-audio { width: 300px; }
+    .moves-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; }
+    .moves-grid select { padding: 7px 10px; border: 2px solid #ccc; border-radius: 8px; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 600; background: #fafafa; cursor: pointer; outline: none; }
+    .moves-grid select:focus { border-color: var(--gold); }
+    #team-section { width: 100%; max-width: 520px; margin-top: 18px; }
+    #team-table { width: 100%; border-collapse: collapse; background: var(--card-bg); border: 3px solid var(--row-border); display: none; }
+    #team-table td { border: 2px solid var(--row-border); padding: 10px 14px; vertical-align: middle; }
+    .team-img { width: 56px; height: 56px; object-fit: contain; image-rendering: pixelated; }
+    .move-list { list-style: disc inside; font-size: 14px; font-weight: 600; line-height: 1.7; }
+  </style>
 </head>
 <body>
-
   <h1>Pokemon Team Builder</h1>
-
   <div class="card">
-
     <div class="search-row">
       <span class="search-label">Name or ID</span>
       <div class="search-input-row">
@@ -20,34 +45,94 @@
         <button id="find-btn">Find</button>
       </div>
     </div>
-
     <div id="error-msg"></div>
-
     <div id="pokemon-display">
       <img id="pokemon-img" alt="Pokemon sprite">
       <span id="pokemon-name"></span>
     </div>
-
     <audio id="pokemon-audio" controls></audio>
-
     <div class="moves-grid">
       <select id="move1"></select>
       <select id="move2"></select>
       <select id="move3"></select>
       <select id="move4"></select>
     </div>
-
     <button id="add-btn">Add to Team</button>
-
   </div>
-
   <div id="team-section">
     <table id="team-table">
       <tbody id="team-body"></tbody>
     </table>
   </div>
+  <script>
+    var cache = {};
+    var currentPokemon = null;
+    var input = document.getElementById('pokemon-input');
+    var findBtn = document.getElementById('find-btn');
+    var img = document.getElementById('pokemon-img');
+    var nameEl = document.getElementById('pokemon-name');
+    var audio = document.getElementById('pokemon-audio');
+    var selects = [document.getElementById('move1'), document.getElementById('move2'), document.getElementById('move3'), document.getElementById('move4')];
+    var addBtn = document.getElementById('add-btn');
+    var errorMsg = document.getElementById('error-msg');
+    var teamTable = document.getElementById('team-table');
+    var teamBody = document.getElementById('team-body');
 
-  <script src="script.js"></script>
+    findBtn.addEventListener('click', fetchPokemon);
+    input.addEventListener('keydown', function(e) { if (e.key === 'Enter') fetchPokemon(); });
 
+    function fetchPokemon() {
+      var query = input.value.trim().toLowerCase();
+      if (!query) return;
+      errorMsg.style.display = 'none';
+      findBtn.textContent = 'Loading...';
+      findBtn.disabled = true;
+      if (cache[query]) { displayPokemon(cache[query]); findBtn.textContent = 'Find'; findBtn.disabled = false; return; }
+      fetch('https://pokeapi.co/api/v2/pokemon/' + query)
+        .then(function(res) { if (!res.ok) throw new Error('not found'); return res.json(); })
+        .then(function(data) { cache[query] = data; displayPokemon(data); findBtn.textContent = 'Find'; findBtn.disabled = false; })
+        .catch(function() {
+          errorMsg.textContent = 'Could not find "' + query + '". Check spelling and try again.';
+          errorMsg.style.display = 'block';
+          img.style.display = 'none'; nameEl.style.display = 'none'; audio.src = '';
+          selects.forEach(function(s) { s.innerHTML = ''; });
+          currentPokemon = null; findBtn.textContent = 'Find'; findBtn.disabled = false;
+        });
+    }
+
+    function displayPokemon(data) {
+      currentPokemon = data;
+      var spriteUrl = (data.sprites && data.sprites.other && data.sprites.other['official-artwork'] && data.sprites.other['official-artwork'].front_default) ? data.sprites.other['official-artwork'].front_default : (data.sprites && data.sprites.front_default ? data.sprites.front_default : '');
+      img.src = spriteUrl; img.style.display = spriteUrl ? 'block' : 'none';
+      nameEl.textContent = data.name.toUpperCase(); nameEl.style.display = 'block';
+      var cryUrl = data.cries ? (data.cries.latest || data.cries.legacy || '') : '';
+      audio.src = cryUrl;
+      var moves = data.moves.map(function(m) { return m.move.name; });
+      selects.forEach(function(s) {
+        s.innerHTML = '';
+        moves.forEach(function(m) { var opt = document.createElement('option'); opt.value = m; opt.textContent = m; s.appendChild(opt); });
+      });
+      if (moves.length > 1) selects[1].selectedIndex = 1;
+      if (moves.length > 2) selects[2].selectedIndex = 2;
+      if (moves.length > 3) selects[3].selectedIndex = 3;
+    }
+
+    addBtn.addEventListener('click', function() {
+      if (!currentPokemon) return;
+      var selectedMoves = selects.map(function(s) { return s.value; }).filter(Boolean);
+      if (!selectedMoves.length) return;
+      var spriteUrl = currentPokemon.sprites && currentPokemon.sprites.front_default ? currentPokemon.sprites.front_default : '';
+      var row = document.createElement('tr');
+      var imgTd = document.createElement('td');
+      if (spriteUrl) { var ti = document.createElement('img'); ti.src = spriteUrl; ti.className = 'team-img'; imgTd.appendChild(ti); }
+      var movesTd = document.createElement('td');
+      var ul = document.createElement('ul'); ul.className = 'move-list';
+      selectedMoves.forEach(function(m) { var li = document.createElement('li'); li.textContent = m; ul.appendChild(li); });
+      movesTd.appendChild(ul);
+      row.appendChild(imgTd); row.appendChild(movesTd);
+      teamBody.appendChild(row);
+      teamTable.style.display = 'table';
+    });
+  </script>
 </body>
 </html>
