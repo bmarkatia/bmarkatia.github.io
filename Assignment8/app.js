@@ -1,4 +1,9 @@
+// Pokemon Team Builder (vanilla JS)
+// Uses PokeAPI: https://pokeapi.co/api/v2/pokemon/{id or name}
+
 const API_BASE = "https://pokeapi.co/api/v2/pokemon/";
+
+// Cache settings (localStorage) to reduce calls
 const CACHE_PREFIX = "poke_cache_v1:";
 const CACHE_TTL_MS = 1000 * 60 * 60 * 24; // 24 hours
 
@@ -16,8 +21,8 @@ const cryAudio = el("cry");
 const moveSelects = [el("move1"), el("move2"), el("move3"), el("move4")];
 const teamBody = el("teamBody");
 
-let currentPokemon = null; // { id, name, sprite, cry, moves[] }
-let team = []; // array of saved mons
+let currentPokemon = null; // { id, name, spriteUrl, cryUrl, moveNames[] }
+let team = []; // saved entries
 
 function setStatus(msg) {
   statusEl.textContent = msg || "";
@@ -36,7 +41,11 @@ function readCache(q) {
     const raw = localStorage.getItem(cacheKey(q));
     if (!raw) return null;
     const parsed = JSON.parse(raw);
-    if (Date.now() - parsed.savedAt > CACHE_TTL_MS) {
+
+    if (!parsed.savedAt || !parsed.data) return null;
+
+    const age = Date.now() - parsed.savedAt;
+    if (age > CACHE_TTL_MS) {
       localStorage.removeItem(cacheKey(q));
       return null;
     }
@@ -50,29 +59,34 @@ function writeCache(q, data) {
   try {
     localStorage.setItem(cacheKey(q), JSON.stringify({ savedAt: Date.now(), data }));
   } catch {
-    // ignore cache errors (storage full / disabled)
+    // ignore storage errors
   }
 }
 
-function resetViewer() {
+function resetUIForNewSearch() {
   currentPokemon = null;
+
   spriteImg.style.display = "none";
   spriteImg.src = "";
+
   cryAudio.style.display = "none";
   cryAudio.src = "";
-  moveSelects.forEach(s => {
+
+  moveSelects.forEach((s) => {
     s.innerHTML = "";
     s.disabled = true;
   });
+
   addBtn.disabled = true;
 }
 
-function populateMoves(moves) {
-  const options = ["-- choose a move --", ...moves];
+function fillMoveDropdowns(moveNames) {
+  const options = ["-- choose a move --", ...moveNames];
 
   moveSelects.forEach((select) => {
     select.disabled = false;
     select.innerHTML = "";
+
     options.forEach((name, idx) => {
       const opt = document.createElement("option");
       opt.value = idx === 0 ? "" : name;
@@ -83,148 +97,146 @@ function populateMoves(moves) {
 }
 
 async function fetchPokemon(q) {
-  // Try cache first (minimize API calls)
   const cached = readCache(q);
   if (cached) return cached;
 
-  const resp = await fetch(`${API_BASE}${encodeURIComponent(q)}/`);
+  const url = `${API_BASE}${encodeURIComponent(q)}/`;
+  const resp = await fetch(url);
+
   if (!resp.ok) {
-    throw new Error(`Not found (HTTP ${resp.status})`);
+    throw new Error(`Pokemon not found: ${q} (HTTP ${resp.status})`);
   }
+
   const data = await resp.json();
   writeCache(q, data);
   return data;
 }
 
-function buildCurrentPokemonFromApi(data) {
+function buildPokemonFromApi(data) {
   const id = data.id;
   const name = data.name;
 
-  const sprite =
+  const spriteUrl =
     data?.sprites?.front_default ||
     data?.sprites?.other?.["official-artwork"]?.front_default ||
     "";
 
-  const cry =
+  const cryUrl =
     data?.cries?.latest ||
     data?.cries?.legacy ||
     "";
 
-  const moves = (data.moves || [])
-    .map(m => m?.move?.name)
+  const moveNames = (data.moves || [])
+    .map((m) => m?.move?.name)
     .filter(Boolean);
 
-  return { id, name, sprite, cry, moves };
+  return { id, name, spriteUrl, cryUrl, moveNames };
 }
 
-function renderViewer(p) {
-  // Sprite
-  if (p.sprite) {
-    spriteImg.src = p.sprite;
+function showPokemon(p) {
+  // Image
+  if (p.spriteUrl) {
+    spriteImg.src = p.spriteUrl;
     spriteImg.alt = `${p.name} sprite`;
     spriteImg.style.display = "block";
   } else {
     spriteImg.style.display = "none";
   }
 
-  // Cry audio
-  if (p.cry) {
-    cryAudio.src = p.cry;
+  // Audio
+  if (p.cryUrl) {
+    cryAudio.src = p.cryUrl;
     cryAudio.load();
     cryAudio.style.display = "block";
   } else {
     cryAudio.style.display = "none";
   }
 
-  // Moves dropdowns
-  populateMoves(p.moves);
+  // Moves
+  fillMoveDropdowns(p.moveNames);
 
   addBtn.disabled = false;
 }
 
-function selectedMoves() {
-  const picks = moveSelects
-    .map(s => s.value)
-    .filter(v => v && v.trim().length > 0);
-
-  // If user picks duplicates, we’ll keep them as-is unless you want to enforce uniqueness.
-  return picks;
+function getChosenMoves() {
+  return moveSelects.map((s) => s.value.trim());
 }
 
 function renderTeam() {
   teamBody.innerHTML = "";
 
-  team.forEach((mon) => {
+  // One row per Pokemon, like your sample
+  team.forEach((entry, idx) => {
     const tr = document.createElement("tr");
+    const td = document.createElement("td");
 
-    const tdMon = document.createElement("td");
     const wrap = document.createElement("div");
-    wrap.className = "teamMon";
+    wrap.className = "teamRow";
 
     const img = document.createElement("img");
-    img.src = mon.sprite || "";
-    img.alt = mon.name;
+    img.src = entry.spriteUrl || "";
+    img.alt = entry.name;
 
-    const nameDiv = document.createElement("div");
-    nameDiv.textContent = `${mon.name} (#${mon.id})`;
-
-    wrap.appendChild(img);
-    wrap.appendChild(nameDiv);
-    tdMon.appendChild(wrap);
-
-    const tdMoves = document.createElement("td");
     const ul = document.createElement("ul");
-    mon.moves.forEach(mv => {
+    ul.className = "movesList";
+
+    entry.moves.forEach((mv) => {
       const li = document.createElement("li");
       li.textContent = mv;
       ul.appendChild(li);
     });
-    tdMoves.appendChild(ul);
 
-    tr.appendChild(tdMon);
-    tr.appendChild(tdMoves);
+    wrap.appendChild(img);
+    wrap.appendChild(ul);
+
+    td.appendChild(wrap);
+    tr.appendChild(td);
+
     teamBody.appendChild(tr);
   });
 }
 
-async function onFind() {
+async function onFindClick() {
   const q = normalizeQuery(queryInput.value);
+
   if (!q) {
     setStatus("Enter a Pokemon name or ID.");
     return;
   }
 
-  resetViewer();
+  resetUIForNewSearch();
   setStatus("Loading...");
 
   try {
     const apiData = await fetchPokemon(q);
-    const p = buildCurrentPokemonFromApi(apiData);
+    const p = buildPokemonFromApi(apiData);
 
-    if (!p.moves.length) {
-      setStatus("Loaded, but no moves found.");
+    if (!p.moveNames.length) {
+      setStatus(`Loaded ${p.name} (#${p.id}), but no moves found.`);
     } else {
-      setStatus(`Loaded: ${p.name} (#${p.id})`);
+      setStatus(`Loaded ${p.name} (#${p.id}). Choose 4 moves.`);
     }
 
     currentPokemon = p;
-    renderViewer(p);
+    showPokemon(p);
   } catch (err) {
-    setStatus("Could not find that Pokemon. Try a number 1–151 or a valid name.");
     console.error(err);
+    setStatus("Could not find that Pokemon. Try a valid name or an ID number.");
   }
 }
 
-function onAdd() {
+function onAddToTeam() {
   if (!currentPokemon) return;
 
-  const moves = selectedMoves();
-  if (moves.length !== 4) {
-    setStatus("Please choose 4 moves (one in each dropdown) before adding to team.");
+  const chosen = getChosenMoves();
+
+  // Require a selection in each dropdown
+  if (chosen.some((mv) => mv.length === 0)) {
+    setStatus("Pick a move in all 4 dropdowns before adding to team.");
     return;
   }
 
-  // Optional: enforce max team size of 6 (classic Pokemon team)
+  // Optional: classic team size limit (you can remove if not wanted)
   if (team.length >= 6) {
     setStatus("Team is full (max 6). Clear team to add more.");
     return;
@@ -233,29 +245,30 @@ function onAdd() {
   team.push({
     id: currentPokemon.id,
     name: currentPokemon.name,
-    sprite: currentPokemon.sprite,
-    moves
+    spriteUrl: currentPokemon.spriteUrl,
+    moves: chosen
   });
 
   renderTeam();
   setStatus(`Added ${currentPokemon.name} to team.`);
 }
 
-function onClear() {
+function onClearTeam() {
   team = [];
   renderTeam();
   setStatus("Team cleared.");
 }
 
-findBtn.addEventListener("click", onFind);
-addBtn.addEventListener("click", onAdd);
-clearBtn.addEventListener("click", onClear);
+findBtn.addEventListener("click", onFindClick);
+addBtn.addEventListener("click", onAddToTeam);
+clearBtn.addEventListener("click", onClearTeam);
 
-// Nice UX: press Enter to search
+// Press Enter in the input to search
 queryInput.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") onFind();
+  if (e.key === "Enter") onFindClick();
 });
 
 // init
-resetViewer();
+resetUIForNewSearch();
 renderTeam();
+setStatus("Ready.");
