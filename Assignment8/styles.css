@@ -1,0 +1,78 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 24px;
+  background: #d7eef6;
+}
+
+.card {
+  max-width: 760px;
+  margin: 0 auto;
+  background: #fff;
+  border: 6px solid #d8a100;
+  border-radius: 18px;
+  padding: 18px 18px 24px;
+}
+
+h1 { margin: 0 0 14px; text-align: center; }
+h2 { margin: 10px 0; }
+
+.row {
+  display: grid;
+  grid-template-columns: 110px 1fr 90px;
+  gap: 10px;
+  align-items: center;
+}
+
+.status { min-height: 1.25em; margin: 10px 0; }
+
+.viewer {
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  padding: 10px 0 6px;
+}
+
+#sprite {
+  width: 180px;
+  height: 180px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  display: none;
+}
+
+#cry { width: min(520px, 100%); display: none; }
+
+.moves { display: grid; gap: 10px; justify-items: center; }
+
+.moveGrid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+select { padding: 6px; }
+
+.teamTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.teamTable th, .teamTable td {
+  border: 1px solid #000;
+  padding: 8px;
+  vertical-align: top;
+}
+
+.teamMon {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  gap: 10px;
+  align-items: center;
+}
+
+.teamMon img { width: 64px; height: 64px; object-fit: contain; }
+
+ul { margin: 0; padding-left: 18px; }
+button { padding: 8px 12px; }
